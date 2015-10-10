@@ -31,32 +31,31 @@ var norms = ['is', 'and', 'a', 'the', 'that', 'are', 'in', 'an', 'be', 'to', 'of
 var title_arr = [];
 
 var clean_title = function(og_title) {
-var title =  "Fahad didnt help on the extension.".split(" ");//inputted_title.split(" ");
+	var title =  "Fahad didnt help on the extension.".split(" ");//inputted_title.split(" ");
 
-var title_length = title.length;
-var index = 0;
-for (word_seg in title) {
-    if (index >= title_length) {
-        break;
-    }
-    if (word_seg.includes(",")) {
-        if (word_seg.charAt(0).equals(",")) {
-    	    word_seg.substring(1, nextWord.length);
-    	} else {
-    	    word_seg.substring(0, nextWord.length - 1);
-        }
-    } else if (word_seg.includes(".")) {
-	    if (word_seg.charAt(0).equals(".")) {
-	        word_seg.substring(1, nextWord.length);
-	    } else {
-	        word_seg.substring(0, nextWord.length - 1);
+	var title_length = title.length;
+	var index = 0;
+	for (word_seg in title) {
+	    if (index >= title_length) {
+	        break;
 	    }
-    }
-    title_arr[index] = word_seg;
-    index = index + 1;
-    
-}
-return title_arr;
+	    if (word_seg.includes(",")) {
+	        if (word_seg.charAt(0).equals(",")) {
+	    	    word_seg.substring(1, nextWord.length);
+	    	} else {
+	    	    word_seg.substring(0, nextWord.length - 1);
+	        }
+	    } else if (word_seg.includes(".")) {
+		    if (word_seg.charAt(0).equals(".")) {
+		        word_seg.substring(1, nextWord.length);
+		    } else {
+		        word_seg.substring(0, nextWord.length - 1);
+		    }
+	    }
+	    title_arr[index] = word_seg;
+	    index = index + 1;
+	    
+	}
 }
 
 

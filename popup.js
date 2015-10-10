@@ -106,11 +106,8 @@ make_sent = function(a) {
                 
             } else {
                 sentence = sentence + word_array[word] + " ";
-
             }
-        
         }
-
     }
     return sentence_array;
 }
