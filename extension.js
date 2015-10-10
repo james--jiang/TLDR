@@ -1,11 +1,11 @@
 word_map = {}
 add_words = function(sentence_array) { 
 	for (sentence in sentence_array) {
-		for (word in sentence.split()) {
+		for (word in sentence.split(" ")) {
 			var newWord = stemmer(removeContraction(word))
 			var contraction = newWord.split(" ")
 			for nextWord in contraction {
-				(take out period from word )
+				(take out period from word ) //TAKE OUT PERIODS OR COMMAS HERE
 				if not word_map.contains(nextWord) {
 					word_map[nextWord] = 0
 				}
@@ -15,6 +15,9 @@ add_words = function(sentence_array) {
 	}
 
 }
+norms = [“is”, “and”, “a”, “the”, “that”, “are”, “in”, “an”, “be”, “to”, “of”, “for”, “he”, “she”, “they”, “not”, “as”, “but”, “his”, “her”, “or”, “nor”, “if”, “so”, “its”, “than”, “then”, “were”, “was”]
+title =  (document.getElementsByTagName("title")[0].innerHTML).split(“ “);
+(take out period from word) //TAKE OUT PERIODS OR COMMAS HERE
 update_score = function(word) {
 	var def = 1
 	if (title.contains(word)) {
@@ -32,7 +35,7 @@ sum_sentence = function(sentenceArray) {
 		sum = 0
 		words = words.split(" ")
 		for word in words {
-			(take out period, comma)
+			(take out period, comma) //TAKE OUT PERIODS OR COMMAS HERE 
 			if word_map.contains(word) {
 				sum += word_map[nextWord]
 			} else {
