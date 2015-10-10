@@ -42,6 +42,7 @@ var norms = ['is', 'and', 'a', 'the', 'that', 'are', 'in', 'an', 'be', 'to', 'of
 var title_arr = [];
 
 var clean_title = function(og_title) {
+
 var title =  og_title.split(" ");//inputted_title.split(" ");
 
 var title_length = title.length;
