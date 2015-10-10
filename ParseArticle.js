@@ -95,8 +95,6 @@ make_sent = function(a) {
     }
     return sentence_array;
 }
-<<<<<<< HEAD
+
 sentence_array = make_sent(article_text);
 
-=======
->>>>>>> f2e567636bde3549425668ee5480c4550c658393
