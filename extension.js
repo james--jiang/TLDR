@@ -48,19 +48,32 @@ var title_length = title.length;
 
 for (var index = 0; index < title.length; index++) {
     var word_seg = title[index];
-	if (word_seg.includes(".")) {
-	    if (word_seg.charAt(0) == ".") {
+    if (word_seg.includes("!")) {
+    	    if (word_seg.charAt(0) == "!") {
+    	        title[index] = word_seg.substring(1, word_seg.length);
+    	    } else {
+    	        title[index] = word_seg.substring(0, word_seg.length - 1);
+    	    }
+	} if (word_seg.includes("?")) {
+	    if (word_seg.charAt(0) == "?") {
 	        title[index] = word_seg.substring(1, word_seg.length);
 	    } else {
 	        title[index] = word_seg.substring(0, word_seg.length - 1);
 	    }
-	} else if (word_seg.includes(",")) {
+    } if (word_seg.includes(",")) {
 	    if (word_seg.charAt(0) == ",") {
 	        title[index] = word_seg.substring(1, word_seg.length);
 	    } else {
 	        title[index] = word_seg.substring(0, word_seg.length - 1);
 	    }
-	}
+    } if (word_seg.includes(".")) {
+	    if (word_seg.charAt(0) == ".") {
+	        title[index] = word_seg.substring(1, word_seg.length);
+	    } else {
+	        title[index] = word_seg.substring(0, word_seg.length - 1);
+	    }
+    }
+    
     title_arr[index] = title[index];
     
 }
