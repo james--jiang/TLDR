@@ -89,4 +89,3 @@ make_sent = function(a) {
     }
     return sentence_array;
 }
-sentence_array = make_sent(article_text);
