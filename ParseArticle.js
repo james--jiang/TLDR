@@ -1,4 +1,4 @@
-
+var article_text = "Article text here"; 
 /* 
 validate_sent in which checks extraneous cases. This function mostly includes
 conditionals to check certain cases in which is not a valid end of sentence,
@@ -7,8 +7,12 @@ Otherwise, return 1. This function is used to determine whether to add a
 constructed sentence structure into the sentence array.
 */
 
-validate_sent = function(word) {
-    if (word.includes("Mr.")) {
+validate_period = function(word) {
+    if (word.includes("?")) {
+        return 1;
+    } else if (word.includes("!")) {
+        return 1;
+    } else if (word.includes("Mr.")) {
         return 0;
     } else if (word.includes("Mrs.")) {
         return 0;
@@ -55,32 +59,34 @@ make_sent = function(a) {
     Splitting into array of words based on whitespace.
     */
     var word_array = a.split(" ");
-    var array_size = a.split(".").length;  
-    var sentence_array = new Array(array_size);
+    var sentence_array = [];
     var sentence = "";
-    var count = 0;
     for (word in word_array) {
         /*
         If word does not contain a period, add to sentence and a whitespace.
         */
         if (!word_array[word].includes(".")) {
-            sentence = sentence + word_array[word] + " ";
+            if (word_array[word].includes("?") || word_array[word].includes("!")) {
+                sentence = sentence + word_array[word];
+                sentence_array.push(sentence);
+                sentence = "";
+            } else {
+                sentence = sentence + word_array[word] + " ";
+            }
         } else {
         /*
         Otherwise, test validity of sentence. If valid, puts in sentence 
         array and refreshes sentence string. Otherwise continue adding onto
         the sentence.
         */
-            var validity = validate_sent(word_array[word]);
+            var validity = validate_period(word_array[word]);
             if (validity != 0) {
                 sentence = sentence + word_array[word];
-                sentence_array[count] = sentence;
-                count = count + 1;
+                sentence_array.push(sentence);
                 sentence = "";
                 
             } else {
                 sentence = sentence + word_array[word] + " ";
-                sentence_array[count] = sentence;
 
             }
         
@@ -89,3 +95,6 @@ make_sent = function(a) {
     }
     return sentence_array;
 }
+
+sentence_array = make_sent(article_text);
+
