@@ -44,6 +44,9 @@ validate_period = function(word) {
     var periodChar = word.indexOf(".");
     periodChar = periodChar - 1;
     var charBeforePeriod = word.charAt(periodChar);
+    if (typeof(charBeforePeriod) == 'number') {
+        return 1;
+    }
     if (charBeforePeriod == charBeforePeriod.toUpperCase()) {
         return 0;
     }

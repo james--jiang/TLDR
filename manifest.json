@@ -7,8 +7,14 @@
         "scripts": ["event.js"],
         "persistent": false
     },
+
+    "icons": {"16" : "icons/icong16.png",
+                    "48" : "icons/icong48.png",
+                    "128" : "icons/icong128.png"
+                    },
+
     "browser_action": {
-        "default_icon": "icon.png",
+        
         "default_popup": "popup.html"
     },
     "permissions": [
