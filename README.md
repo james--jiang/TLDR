@@ -7,7 +7,7 @@ Version: 1.0 | October 2015
     Similar to the common ackronym, tl;dr (too long; didn't read). It is a Google Chrome extension, developed at Cal Hacks 2015, that simplifies articles on webpages into short summaries. 
     
     
-How to use:    
+<b>How can you use it?</b> <br/>  
         
     
     
@@ -22,4 +22,4 @@ How to use:
     We are a group of UC Berkeley students who have really short attention spans but enjoy trying to force ourselfs to read long articles because we are dirty masochists. 
     
     
-TL;DR? Same.
+TL;DR? Highlight text and click extention for summaries!
