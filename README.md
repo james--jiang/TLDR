@@ -1,6 +1,6 @@
 # TLDR
 
-Version: 1.0
+Version: 1.0 | October 2015
 
 
 <b>What is TLDR?</b> <br/>
