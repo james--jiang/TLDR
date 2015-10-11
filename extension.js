@@ -82,7 +82,7 @@ return title_arr;
 }
 title_arr = clean_title("Fahad freaking rocks.");
 
-var update_score = function() { //applied where?
+var update_score = function() { 
     for (word in word_map) {
         var def = 1;
     	if (title_arr.indexOf(word) >= 0) {
