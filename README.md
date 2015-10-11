@@ -1,4 +1,4 @@
-# TLDR
+# TL;DR
 
 Version: 1.0 | October 2015
 
