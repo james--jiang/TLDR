@@ -164,7 +164,6 @@ make_sent = function(a) {
             } else if (validity == 0) {
                 sentence = sentence + word_array[word] + " ";
             } else {
-                sentence = sentence+word_array[word]
                 var with_period = word_array[word].substring(0, word_array[word].indexOf(".")+ 1);
                 var second_part = word_array[word].substring(word_array[word].indexOf(".") + 1, word_array[word].length)
                 sentence = sentence + with_period;
