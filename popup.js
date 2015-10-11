@@ -6,6 +6,7 @@
     then update_score, then sum_sentence, then print_final.
 
 **/
+var onOff = 1;
 function onPageDetailsReceived(pageDetails)  { 
     var article_text = pageDetails.summary;
     var sentence_array = makeSentences(article_text);
@@ -16,12 +17,33 @@ function onPageDetailsReceived(pageDetails)  {
     update_score();
     sum_sentence(sentence_array);
     var summarized = print_final(sentence_array);
-    
 
     document.getElementById('title').textContent = pageDetails.title; 
     //document.getElementById('url').textContent = pageDetails.url; 
-    document.getElementById('summary').innerText = summarized; // will be the final ordered lists
+    if (pageDetails.summary == '') {
+        document.getElementById('summary').innerText = "Please highlight the text you would like to summarize.";
+         // will be the final ordered lists
+    } else {
+        document.getElementById('summary').innerText = summarized;
+    }
+    
 } 
+
+/** 
+    Determines whether user wants to summarize the highlighted text or whole text.
+**/
+function selectOrWhole(pageDetails) {
+    if (pageDetails.summary == '') {
+        //chrome.tabs.executeScript(null, { file: 'w_contscrpt.js' });
+
+        //chrome.runtime.onMessage.addListener(function(message)  { 
+        // Call the onPageDetailsReceived function in popup.js .
+        //onPageDetailsReceived(message); 
+        onPageDetailsReceived(pageDetails);
+    } else {
+        onPageDetailsReceived(pageDetails);
+    }
+}
 
 
 function makeSentences(article_text) {
@@ -149,21 +171,7 @@ make_sent = function(a) {
     return sentence_array;
 }
 
-/** 
-    Determines whether user wants to summarize the highlighted text or whole text.
-**/
-function selectOrWhole(pageDetails) {
-    if (pageDetails.summary == '') {
-        chrome.tabs.executeScript(null, { file: 'w_contscrpt.js' });
 
-        chrome.runtime.onMessage.addListener(function(message)  { 
-        // Call the onPageDetailsReceived function in popup.js .
-        onPageDetailsReceived(message); 
-        });
-    } else {
-        onPageDetailsReceived(pageDetails);
-    }
-}
 
 
 

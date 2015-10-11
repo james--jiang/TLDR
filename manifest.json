@@ -2,7 +2,7 @@
 	"manifest_version": 2,
     "name": "TL;DR",
     "description": "Summarizes a whole article or just the highlighted text.",
-    "version": "0.9",
+    "version": "1.0",
     "background": {
         "scripts": ["event.js"],
         "persistent": false
