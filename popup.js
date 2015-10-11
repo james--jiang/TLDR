@@ -6,7 +6,6 @@
     then update_score, then sum_sentence, then print_final.
 
 **/
-var onOff = 1;
 function onPageDetailsReceived(pageDetails)  { 
     var article_text = pageDetails.summary;
     var sentence_array = makeSentences(article_text);
@@ -33,16 +32,16 @@ function onPageDetailsReceived(pageDetails)  {
     Determines whether user wants to summarize the highlighted text or whole text.
 **/
 function selectOrWhole(pageDetails) {
-    if (pageDetails.summary == '') {
-        //chrome.tabs.executeScript(null, { file: 'w_contscrpt.js' });
+    // if (pageDetails.summary == '') {
+    //     //chrome.tabs.executeScript(null, { file: 'w_contscrpt.js' });
 
-        //chrome.runtime.onMessage.addListener(function(message)  { 
-        // Call the onPageDetailsReceived function in popup.js .
-        //onPageDetailsReceived(message); 
+    //     //chrome.runtime.onMessage.addListener(function(message)  { 
+    //     // Call the onPageDetailsReceived function in popup.js .
+    //     //onPageDetailsReceived(message); 
+    //     onPageDetailsReceived(pageDetails);
+    // } else {
         onPageDetailsReceived(pageDetails);
-    } else {
-        onPageDetailsReceived(pageDetails);
-    }
+    // }
 }
 
 
@@ -312,11 +311,21 @@ print_final = function(sentenceArray) {
     var str = "";
     var overall = [];
 
-    var num = Math.floor(sentenceArray.length * .2);
+    var num = Math.floor(sentenceArray.length * .4);
 
-    if (sentenceArray.length <= 7) {
+    if (sentenceArray.length <= 10) {
         num = sentenceArray.length;
-    }
+    } else if (sentenceArray.length <= 15) {
+        num = Math.floor(sentenceArray.length * .6);
+    } 
+
+    //   else if (sentenceArray.length <= 30) {
+    //     num = Math.floor(sentenceArray.length * .4);
+    // } else if (sentenceArray.length <= 45) {
+    //     num = Math.floor(sentenceArray.length * .4);
+    // } else if (sentenceArray.length <= 60) {
+    //     num = Math.floor(sentenceArray.length * .3);
+    // }
 
     for (var k = 0; k < num && k < sortable.length; k++) {
         overall.push(sortable[k][0]);
@@ -324,6 +333,9 @@ print_final = function(sentenceArray) {
     overall.sort(function (a, b) { 
     return a - b;
     });
+
+    str = str.concat(sentenceArray[0]);
+    str = str.concat(" ");
     for (var j = 0; j < overall.length; j++) {
         str = str.concat(sentenceArray[overall[j]]);
         str = str.concat(" ");
