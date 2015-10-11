@@ -212,7 +212,7 @@ var clean_title = function(og_title) {
 
 var update_score = function() { //applied where?
     for (word in word_map) {
-        var def = 1;
+        var def = 1.5;
         if (title_arr.indexOf(word) >= 0) {
             def = 8.0;
         }
@@ -274,7 +274,14 @@ print_final = function(sentenceArray) {
     var i = 0;
     var str = "";
     var overall = [];
-    for (var k = 0; k < 7 && k < sortable.length; k++) {
+
+    var num = Math.floor(sentenceArray.length * .2);
+
+    if (sentenceArray.length <= 7) {
+        num = sentenceArray.length;
+    }
+
+    for (var k = 0; k < num && k < sortable.length; k++) {
         overall.push(sortable[k][0]);
     }
     overall.sort(function (a, b) { 
