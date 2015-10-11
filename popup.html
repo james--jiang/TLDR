@@ -6,16 +6,15 @@
                 margin: 0;
                 padding: 0;
                 min-width: 420px;
-                min-height: 680px;
+                min-height: 420px;
                 overflow-x: scroll; 
                 font-family: Helvetica, sans-serif; 
                 font-size: 12px; 
-                background-color: beige;
-                border: 10px solid black;
+                background-color: #F8F8F8;
             }
             input, textarea { 
                 width: 420px;
-                height: 680px;
+                height: 420px;
             }
             input#save { 
                 font-weight: bold; width: auto; 
@@ -27,13 +26,14 @@
                 font-weight: bold;
                 margin: 0;
                 padding: 5px;
-                border-bottom: 4px solid black;
             }
+
 
             p    {
                 color: black;
                 font-size: 16px;
-                text-indent: 32px;
+                padding-left: 10px;
+                padding-right: 10px;
 }
 
         
@@ -41,9 +41,8 @@
 <script src="popup.js"></script>
     </head>
     <body>
-        <h1><label for = "title">Title</label><br /> </h1>
-        <div id="title"></div>
-            <p><label for="summary">Summary</label><br />
+        <h1> <div id="title"></div> </h1>
+            <p><label for="summary"><strong>Summary</strong></label><br />
             <p id="summary" name="summary" rows="6" cols="35"></p> 
     </body>
 </html>
