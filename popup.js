@@ -15,13 +15,12 @@ function onPageDetailsReceived(pageDetails)  {
     add_words(sentence_array);
     update_score();
     sum_sentence(sentence_array);
-    lst = [];
     var summarized = print_final(sentence_array);
     
 
     document.getElementById('title').textContent = pageDetails.title; 
     //document.getElementById('url').textContent = pageDetails.url; 
-    document.getElementById('summary').innerText = summarized; // will be the final ordered lists
+    document.getElementById('summary').innerText = sentence_array[0]; // will be the final ordered lists
 } 
 
 
@@ -74,10 +73,21 @@ validate_period = function(word) {
     var periodChar = word.indexOf(".");
     periodChar = periodChar - 1;
     var charBeforePeriod = word.charAt(periodChar);
+    periodChar = periodChar + 1;
+    var charAfterPeriod = word.charAt(periodChar);
+    var numberquestion = parseInt(charBeforePeriod);
+    if (charAfterPeriod == '"') {
+        return 1;
+    }
+    if (numberquestion != NaN && numberquestion < 10) {
+        return 1;
+    }
     if (charBeforePeriod == charBeforePeriod.toUpperCase()) {
         return 0;
     }
     return 1;
+
+
 }
 
 /* 
@@ -212,7 +222,7 @@ var clean_title = function(og_title) {
 
 var update_score = function() { //applied where?
     for (word in word_map) {
-        var def = 1;
+        var def = 1.5;
         if (title_arr.indexOf(word) >= 0) {
             def = 8.0;
         }
@@ -269,12 +279,18 @@ print_final = function(sentenceArray) {
     for (index in sentMap) {
         sortable.push([index, sentMap[index]]);
     }
-    sortable.sort(function(a, b) {return b[1] - a[1]});
-
+    sortable.sort(function(a, b) {return b[1] - a[1]}); 
     var i = 0;
     var str = "";
     var overall = [];
-    for (var k = 0; k < 7 && k < sortable.length; k++) {
+
+    var num = Math.floor(sentenceArray.length * .2);
+
+    if (sentenceArray.length <= 7) {
+        num = sentenceArray.length;
+    }
+
+    for (var k = 0; k < num && k < sortable.length; k++) {
         overall.push(sortable[k][0]);
     }
     overall.sort(function (a, b) { 
