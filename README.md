@@ -3,7 +3,7 @@
 Version: 1.0 | October 2015
 
 
-<b>What is TLDR?</b> <br/>
+<b>What is TL;DR?</b> <br/>
     Similar to the common ackronym, tl;dr (too long; didn't read). It is a Google Chrome extension, developed at Cal Hacks 2015, that simplifies articles on webpages into short summaries. 
     
     
