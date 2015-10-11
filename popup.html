@@ -3,26 +3,46 @@
     <head>
         <style>
             body { 
-                min-width: 420px; 
-                overflow-x: hidden; 
-                font-family: Arial, sans-serif; 
+                margin: 0;
+                padding: 0;
+                min-width: 420px;
+                min-height: 420px;
+                overflow-x: scroll; 
+                font-family: Helvetica, sans-serif; 
                 font-size: 12px; 
+                background-color: #F8F8F8;
             }
             input, textarea { 
-                width: 420px; 
+                width: 420px;
+                height: 420px;
             }
             input#save { 
                 font-weight: bold; width: auto; 
             }
-        </style>
-        <script src="popup.js"></script>
+            h1  {
+                background-color: #30CEF6;
+                color: white;
+                font-size: 24px;
+                font-weight: bold;
+                margin: 0;
+                padding: 5px;
+            }
+
+
+            p    {
+                color: black;
+                font-size: 16px;
+                padding-left: 10px;
+                padding-right: 10px;
+}
+
+        
+</style>
+<script src="popup.js"></script>
     </head>
     <body>
-        <u1>
-            <p><label for="title"><strong>Title</strong></label><br />
-            <div id="title"></div>
+        <h1> <div id="title"></div> </h1>
             <p><label for="summary"><strong>Summary</strong></label><br />
             <p id="summary" name="summary" rows="6" cols="35"></p> 
-        </u1>
     </body>
 </html>
