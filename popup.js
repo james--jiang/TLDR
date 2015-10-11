@@ -333,12 +333,13 @@ print_final = function(sentenceArray) {
     overall.sort(function (a, b) { 
     return a - b;
     });
-
     str = str.concat(sentenceArray[0]);
     str = str.concat(" ");
     for (var j = 0; j < overall.length; j++) {
-        str = str.concat(sentenceArray[overall[j]]);
-        str = str.concat(" ");
+        if (overall[j] != 0) {
+            str = str.concat(sentenceArray[overall[j]]);
+            str = str.concat(" ");
+        }
     }
     return str;
 }
