@@ -98,10 +98,14 @@ validate_period = function(word) {
     periodChar = periodChar + 1;
     var charAfterPeriod = word.charAt(periodChar);
     var numberquestion = parseInt(charBeforePeriod);
+    var number2question = parseInt(word.charAt(periodChar + 1));
     if (charAfterPeriod == '"') {
         return 2;
     }
     if (numberquestion != NaN && numberquestion < 10) {
+        if (number2question != NaN && number2question < 10) {
+            return 0;
+        }
         return 1;
     }
     if (charBeforePeriod == charBeforePeriod.toUpperCase()) {
@@ -160,6 +164,7 @@ make_sent = function(a) {
             } else if (validity == 0) {
                 sentence = sentence + word_array[word] + " ";
             } else {
+                sentence = sentence+word_array[word]
                 var with_period = word_array[word].substring(0, word_array[word].indexOf(".")+ 1);
                 var second_part = word_array[word].substring(word_array[word].indexOf(".") + 1, word_array[word].length)
                 sentence = sentence + with_period;
