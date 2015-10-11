@@ -1,25 +1,25 @@
-# TLDR
+# TL;DR
 
-Version: 1.0
+Version: 1.0 | October 2015
 
 
-What is TLDR?:
-    Similar to the common ackronym, tl;dr (too long to read), is exactly what it sounds like. The overall premise includes a google chrome extension that simplifies articles into summaries. 
+<b>What is TL;DR?</b> <br/>
+    Similar to the common ackronym, tl;dr (too long; didn't read). It is a Google Chrome extension, developed at Cal Hacks 2015, that simplifies articles on webpages into short summaries. 
     
     
-How to use:    
+<b>How can you use it?</b> <br/>  
         
     
     
-How is it done?: 
-    Parses the article into words and sentences.
-    Assigns "popularity" points to each occurance of a word.
-    Sentence "popularity" is then formed from the sum of those words' values.
-    Return a certain percanatage of the most highly ranked sentences in chronological order.
+<b>How is it done? </b> <br/>
+    1. Parses the article into words and sentences. <br/>
+    2. Assigns "popularity" points to each occurance of a word. <br/>
+    3. Sentence "popularity" is then formed from the sum of those words' values. <br/>
+    4. Return a certain percanatage of the most highly ranked sentences in chronological order. <br/>
 
 
-Who are we?:
+<b>Who are we? </b> <br/>
+    We are a group of UC Berkeley students who have really short attention spans but enjoy trying to force ourselfs to read long articles because we are dirty masochists. 
     
     
-    
-Tl;dr: 
+TL;DR? Highlight text and click extention for summaries!
