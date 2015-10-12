@@ -7,6 +7,9 @@
 
 **/
 var summary_count = 0;
+var pageDetails_holder;
+var user_size_pref = 0.0;
+
 function onPageDetailsReceived(pageDetails)  { 
     var article_text = pageDetails.summary;
     var sentence_array = makeSentences(article_text);
@@ -16,11 +19,14 @@ function onPageDetailsReceived(pageDetails)  {
     add_words(sentence_array);
     update_score();
     sum_sentence(sentence_array);
+
+    var e = document.getElementById("selected");
+    user_size_pref = parseFloat(e.options[e.selectedIndex].value);
+
     var summarized = print_final(sentence_array);
 
     document.getElementById('title').textContent = pageDetails.title; 
     //document.getElementById('url').textContent = pageDetails.url;
-    
 
     if (pageDetails.summary == '') {
         document.getElementById('summary').innerText = "Please highlight the text you would like to summarize.";
@@ -29,11 +35,14 @@ function onPageDetailsReceived(pageDetails)  {
     } else {
         document.getElementById('article_count').textContent = String(sentence_array.length);
         document.getElementById('summary_count').textContent = String(summary_count);
-        document.getElementById('summary').innerText = summarized;
-        
+        document.getElementById('summary').innerText = summarized; 
     }
     
 } 
+
+function myFunction() {
+    onPageDetailsReceived(pageDetails_holder);
+}
 
 /** 
     Determines whether user wants to summarize the highlighted text or whole text.
@@ -47,6 +56,7 @@ function selectOrWhole(pageDetails) {
     //     //onPageDetailsReceived(message); 
     //     onPageDetailsReceived(pageDetails);
     // } else {
+        pageDetails_holder = pageDetails;
         onPageDetailsReceived(pageDetails);
     // }
 }
@@ -319,20 +329,12 @@ print_final = function(sentenceArray) {
     var overall = [];
 
     var num = Math.floor(sentenceArray.length * .4);
-
-    if (sentenceArray.length <= 10) {
+    if (user_size_pref != 0.0) {
+        num = Math.floor(sentenceArray.length * user_size_pref);
+    } if (sentenceArray.length <= 10) {
         num = sentenceArray.length;
-    } else if (sentenceArray.length <= 15) {
-        num = Math.floor(sentenceArray.length * .6);
-    } 
+    }
 
-    //   else if (sentenceArray.length <= 30) {
-    //     num = Math.floor(sentenceArray.length * .4);
-    // } else if (sentenceArray.length <= 45) {
-    //     num = Math.floor(sentenceArray.length * .4);
-    // } else if (sentenceArray.length <= 60) {
-    //     num = Math.floor(sentenceArray.length * .3);
-    // }
     summary_count = num;
     for (var k = 0; k < num && k < sortable.length; k++) {
         overall.push(sortable[k][0]);
@@ -569,3 +571,5 @@ window.addEventListener('load', function(evt) {
         eventPage.getPageDetails(selectOrWhole);
     });
 });
+
+window.addEventListener("click", myFunction);
