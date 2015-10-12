@@ -22,4 +22,4 @@ Version: 1.0 | October 2015
     We are a group of UC Berkeley students who have really short attention spans but enjoy trying to force ourselfs to read long articles because we are dirty masochists. 
     
     
-TL;DR? Highlight text and click extention for summaries!
+<b>TL;DR: </b> Highlight text and click extention for summaries!
