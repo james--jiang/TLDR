@@ -44,14 +44,28 @@ validate_period = function(word) {
     var periodChar = word.indexOf(".");
     periodChar = periodChar - 1;
     var charBeforePeriod = word.charAt(periodChar);
+    periodChar = periodChar + 1;
+    var charAfterPeriod = word.charAt(periodChar);
     var numberquestion = parseInt(charBeforePeriod);
+    var number2question = parseInt(word.charAt(periodChar + 1));
+    if (charAfterPeriod == '"') {
+        return 2;
+    }
     if (numberquestion != NaN && numberquestion < 10) {
+        if (number2question != NaN && number2question < 10) {
+            return 0;
+        }
         return 1;
     }
     if (charBeforePeriod == charBeforePeriod.toUpperCase()) {
         return 0;
     }
+    if (periodChar != word.length - 1) {
+        return 3;
+    }
     return 1;
+
+
 }
 
 /* 
@@ -84,21 +98,29 @@ make_sent = function(a) {
         the sentence.
         */
             var validity = validate_period(word_array[word]);
-            if (validity != 0) {
+            if (validity == 1) {
                 sentence = sentence + word_array[word];
                 sentence_array.push(sentence);
                 sentence = "";
-                
-            } else {
+            } else if (validity == 2) {
+                var periodChar = word_array[word].indexOf(".");
+                var afterPeriod = periodChar + 1;
+                var with_period = word_array[word].substring(0, afterPeriod+2);
+                var second_part = word_array[word].substring(afterPeriod + 2, word_array[word].length);
+                sentence = sentence + with_period;
+                sentence_array.push(sentence);
+                sentence = second_part + " ";
+            } else if (validity == 0) {
                 sentence = sentence + word_array[word] + " ";
-
+            } else {
+                var with_period = word_array[word].substring(0, word_array[word].indexOf(".")+ 1);
+                var second_part = word_array[word].substring(word_array[word].indexOf(".") + 1, word_array[word].length)
+                sentence = sentence + with_period;
+                sentence_array.push(sentence);
+                sentence = second_part + " ";
             }
-        
         }
-
     }
     return sentence_array;
 }
-
-sentence_array = make_sent(article_text);
-
+l.
