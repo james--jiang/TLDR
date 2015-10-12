@@ -24,6 +24,7 @@ function onPageDetailsReceived(pageDetails)  {
 
     if (pageDetails.summary == '') {
         document.getElementById('summary').innerText = "Please highlight the text you would like to summarize.";
+        document.getElementById('summary_count').textContent = "nothing :( ";
          // will be the final ordered lists
     } else {
         document.getElementById('article_count').textContent = String(sentence_array.length);
