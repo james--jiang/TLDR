@@ -22,4 +22,6 @@ Version: 1.0 | October 2015
     We are a group of UC Berkeley students who have really short attention spans but enjoy trying to force ourselfs to read long articles because we are dirty masochists. 
     
     
-<b>TL;DR? </b> <font style="background-color: yellow;"> </font> Highlight text and click extention for summaries! </font>
+<b>TL;DR? </b> <span style="background-color:yellow;">
+Highlight text and click extention for summaries!
+</span>
