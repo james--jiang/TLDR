@@ -23,4 +23,3 @@ Version: 1.0 | October 2015
     
     
 <b>TL;DR? </b> <font style="background-color: yellow;">Highlight text and click extention for summaries!</font>
-<span style="BACKGROUND-COLOR: #yellow">Highlight text and click extention for summaries!</span>
