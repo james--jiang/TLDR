@@ -6,6 +6,7 @@
     then update_score, then sum_sentence, then print_final.
 
 **/
+var summary_count = 0;
 function onPageDetailsReceived(pageDetails)  { 
     var article_text = pageDetails.summary;
     var sentence_array = makeSentences(article_text);
@@ -18,12 +19,17 @@ function onPageDetailsReceived(pageDetails)  {
     var summarized = print_final(sentence_array);
 
     document.getElementById('title').textContent = pageDetails.title; 
-    //document.getElementById('url').textContent = pageDetails.url; 
+    //document.getElementById('url').textContent = pageDetails.url;
+    
+
     if (pageDetails.summary == '') {
         document.getElementById('summary').innerText = "Please highlight the text you would like to summarize.";
          // will be the final ordered lists
     } else {
+        document.getElementById('article_count').textContent = String(sentence_array.length);
+        document.getElementById('summary_count').textContent = String(summary_count);
         document.getElementById('summary').innerText = summarized;
+        
     }
     
 } 
@@ -326,7 +332,7 @@ print_final = function(sentenceArray) {
     // } else if (sentenceArray.length <= 60) {
     //     num = Math.floor(sentenceArray.length * .3);
     // }
-
+    summary_count = num;
     for (var k = 0; k < num && k < sortable.length; k++) {
         overall.push(sortable[k][0]);
     }
