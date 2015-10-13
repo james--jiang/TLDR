@@ -101,6 +101,8 @@ validate_period = function(word) {
         return 0;
     } else if (word.includes("Blvd.")) {
         return 0;
+    } else if (word.includes("Sen.")) {
+        return 0;
     } else if (word.includes("Sr.")) {
         return 0;
     }
