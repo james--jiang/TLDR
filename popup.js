@@ -9,10 +9,14 @@
 var summary_count = 0;
 var pageDetails_holder;
 var user_size_pref = 0.0;
+var saved_sentence_array = [];
 
 function onPageDetailsReceived(pageDetails)  { 
     var article_text = pageDetails.summary;
     var sentence_array = makeSentences(article_text);
+    for (var i = 0; i < sentence_array.length; i++) {
+        saved_sentence_array.push(sentence_array[i]);
+    }
 
     title_arr = clean_title(pageDetails.title);
 
@@ -492,7 +496,6 @@ var sum_sentence = function(sentenceArray) {
 
 
 print_final = function(sentenceArray) {
-    var sentence_array = makeSentences(article_text);
     var sortable = [];
     for (index in sentMap) {
         sortable.push([index, sentMap[index]]);
@@ -517,21 +520,21 @@ print_final = function(sentenceArray) {
         if (quote_instances != 0 && (quote_instances % 2 == 0)) {
             // Check if quote is in beginning of sentence.
             if (sortable[k][0].indexOf('"') == 0) {
-                var sarray_index = sentence_array.indexOf(sortable[k][0],[0, num]);
+                var sarray_index = saved_sentence_array.indexOf(sortable[k][0],[0, num]);
                 var quote_str = sortable[k][0];
-                while (!sentence_array[sarray_index].includes('"')) {
+                while (!saved_sentence_array[sarray_index].includes('"')) {
                     sarray_index += 1;
                     quote_str.concat(" ");
-                    quote_str.concat(sentence_array[sarray_index]);
+                    quote_str.concat(saved_sentence_array[sarray_index]);
                 }
                 overall.push(quote_str);
             // Check if quote is in end of sentence.    
             } else if (sortable[k][0].indexOf('"') == (sortable[k][0].length - 1)) {
-                var sarray_index = sentence_array.indexOf(sortable[k][0],[0, num]);
+                var sarray_index = saved_sentence_array.indexOf(sortable[k][0],[0, num]);
                 var quote_str = sortable[k][0];
-                while (!sentence_array[sarray_index].includes('"')) {
+                while (!saved_sentence_array[sarray_index].includes('"')) {
                     sarray_index = sarray_index - 1;
-                    var temp = sentence_array(sarray_index);
+                    var temp = saved_sentence_array[sarray_index];
                     temp.concat(" ");
                     temp.concat(quote_str);
                     quote_str = temp;
