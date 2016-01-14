@@ -372,8 +372,18 @@ make_sent = function(a) {
 
 
 
-
+/* 
+This word_map will map a word to a value, indicating what we believe
+its importance is to the whole story. A word in the title is more 
+important then some word like "a"
+*/ 
 var word_map = {};
+
+/* 
+We are going to count the amount of times we see each word through the article. 
+The more times we see the word, the more important it likely is to the whole article.
+We also take care of words that are contractions so that we can get the base word
+*/ 
 var add_words = function(sentence_array) { 
     for (var i = 0; i < sentence_array.length; i++) {
         sentence = sentence_array[i];
@@ -410,10 +420,12 @@ var add_words = function(sentence_array) {
 
 
 
-
+// These are words which shouldn't have as much weight in a sentence. 
 var norms = ['is', 'and', 'a', 'the', 'that', 'are', 'in', 'an', 'be', 'to', 'of', 'for', 'he', 'she', 'they', 'not', 'as', 'but', 'his', 'her', 'or', 'nor', 'if', 'so', 'its', 'than', 'then', 'were', 'was'];
+// On the other hand, words in the title which appear in the article are of more importance. 
 var title_arr = [];
 
+// Gets a clean version of the words in the title
 var clean_title = function(og_title) {
     var title =  og_title.split(" ");//inputted_title.split(" ");
 
@@ -440,7 +452,13 @@ var clean_title = function(og_title) {
 }
 
 
-
+/*
+Applied by the actual pop-up, here is where we actually weight each word. 
+If a word is in the title, we give it a much higher value, but if it's in the norms
+array we defined above, we give it less value, even if it was in the title already. 
+The values we picked, 8.0 and .25 respectively, were more of a trial and error until we 
+found a good combination. 
+*/
 var update_score = function() { //applied where?
     for (word in word_map) {
         var def = 1.5;
@@ -454,8 +472,10 @@ var update_score = function() { //applied where?
     }
 }
 
-
+// Maps a sentence to its value based on the words in the sentence. 
 var sentMap = {};
+
+//Populates sentMap with each sentence and its value based on the values in the wordmap. 
 var sum_sentence = function(sentenceArray) { 
     
     for (var index = 0; index < sentenceArray.length; index++) {
@@ -494,7 +514,14 @@ var sum_sentence = function(sentenceArray) {
 }
 
 
-
+/*
+Here is where the actual summary is finally printed out. 
+We have, what we believe to be, some values associated with each sentence
+in the article. By sorting the array in terms of the values, we know that
+we can print out the most important sentences first, as they will be near the beginning
+of our list. The number of sentences depends on how big of a summary
+the user would like.
+*/
 print_final = function(sentenceArray) {
     var sortable = [];
     for (index in sentMap) {
