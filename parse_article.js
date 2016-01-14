@@ -1,9 +1,13 @@
-var article_text = "Article text here"; 
-/* 
-validate_sent in which checks extraneous cases. This function mostly includes
-conditionals to check certain cases in which is not a valid end of sentence,
-in this case, returning 0 indicating that it is not a valid end of sentence.
-Otherwise, return 1. This function is used to determine whether to add a 
+var article_text = "Article text here";
+/*
+validate_period checks for extraneous cases at the end of a sentence
+  (Meaning that a period does not denote the end of a sentence or
+  different punctuation at the end of sentences).
+This function mostly includes conditionals to check certain cases in
+  which is not a valid end of sentence, in this case, returning 0
+  indicating that it is not a valid end of sentence.
+Otherwise, return 1.
+This function is used to determine whether to add a
 constructed sentence structure into the sentence array.
 */
 
@@ -39,7 +43,8 @@ validate_period = function(word) {
     } else if (word.includes("Sr.")) {
         return 0;
     }
-    /* 
+
+    /*
     Checks if the character before the period is uppercase, if yes, then
     return 0. Otherwise, return 1.
     */
@@ -70,7 +75,7 @@ validate_period = function(word) {
 
 }
 
-/* 
+/*
 make_sent first parses article text into a word array. Secondly, analyzes periods
 and puts sentences in a sentence array.
 */
@@ -95,7 +100,7 @@ make_sent = function(a) {
             }
         } else {
         /*
-        Otherwise, test validity of sentence. If valid, puts in sentence 
+        Otherwise, test validity of sentence. If valid, puts in sentence
         array and refreshes sentence string. Otherwise continue adding onto
         the sentence.
         */
