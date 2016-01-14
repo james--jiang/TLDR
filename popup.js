@@ -613,6 +613,12 @@ function removeContraction(str) {
     return str;
 }
 
+/*
+Contracts words into a more basic form so that the weights of words with
+the same roots can be correctly calculated.
+The Porter Stemming Algorithm was created by Martin Porter.
+Javascript version created by 'andargor' and revised by Christopher McKenzie.
+*/
 var stemmer = (function(){
     var step2list = {
             "ational" : "ate",
