@@ -12,6 +12,7 @@ var user_size_pref = 0.0;
 var saved_sentence_array = [];
 var wordsMap = {}
 var printed = false
+// string used to track the theme
 var mapCount = ""
 // tracks overall words
 
@@ -584,6 +585,8 @@ var contains = function(needle) {
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
+
+//Print map functions prints out the themes of the article, organized by word count but including generic pronouns and prepositions
 print_map = function(wordmap) {
     var common = ["is", "and", "a", "the", "that", "are", "in", "an", 'be', 'to', 'of', 'for', 'he', 'she', 'they', 'not', 'as', 
     'but', 'his', 'her', 'or', 'nor', 'if', 'so', 'its', 'than', 'then', 'were', 'was','on','by','had','has','have','you','it'
@@ -608,8 +611,14 @@ print_map = function(wordmap) {
 
                 }
                 else {
-                    mapstr = mapstr + capitalizeFirstLetter(String(items[word]).split(',')[0]) + "\n";
-                    count += 1
+                    if (count == 9) {
+                        mapstr = mapstr + capitalizeFirstLetter(String(items[word]).split(',')[0]);
+                        count += 1
+                    }
+                    else {
+                        mapstr = mapstr + capitalizeFirstLetter(String(items[word]).split(',')[0]) +  ", ";
+                        count += 1
+                    }
                 }
                 }  
             }
