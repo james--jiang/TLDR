@@ -556,6 +556,8 @@ we can print out the most important sentences first, as they will be near the be
 of our list. The number of sentences depends on how big of a summary
 the user would like.
 */
+
+// Check if an array contains a string
 var contains = function(needle) {
     // Per spec, the way to identify NaN is that it is not equal to itself
     var findNaN = needle !== needle;
@@ -582,6 +584,7 @@ var contains = function(needle) {
 
     return indexOf.call(this, needle) > -1;
 };
+
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
