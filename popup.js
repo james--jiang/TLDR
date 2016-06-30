@@ -10,6 +10,11 @@ var summary_count = 0;
 var pageDetails_holder;
 var user_size_pref = 0.0;
 var saved_sentence_array = [];
+var wordsMap = {}
+var printed = false
+var mapCount = ""
+// tracks overall words
+
 
 function onPageDetailsReceived(pageDetails)  {
     var article_text = pageDetails.summary;
@@ -39,11 +44,13 @@ function onPageDetailsReceived(pageDetails)  {
         document.getElementById('article_count').textContent = String(sentence_array.length);
         document.getElementById('summary_count').textContent = String(summary_count);
         document.getElementById('summary').innerText = summarized;
+        document.getElementById('wordCounts').innerText = print_map(wordsMap)
     }
 
 }
 
 function myFunction() {
+
     onPageDetailsReceived(pageDetails_holder);
 }
 
@@ -376,6 +383,7 @@ This word_map will map a word to a value, indicating what we believe
 its importance is to the whole story. A word in the title is more
 important then some word like "a".
 */
+
 var word_map = {};
 
 /*
@@ -388,12 +396,37 @@ var add_words = function(sentence_array) {
         sentence = sentence_array[i];
         words = sentence.split(" ");
 
+
         for (var j = 0; j < words.length; j++) {
             word = words[j];
+            //for word count
+            countWord = words[j]
+
+            if (validate_period(countWord))  {
+                countWord = countWord.replace('.','')
+            }
+            countWord = countWord.replace(',','')
+            
+            countWord = countWord.replace('?','')
+            
+            countWord = countWord.replace('!','')
+
+            countWord = countWord.replace(' ','')
+            countWord = countWord.replace('\n','')
+            countWord = countWord.replace('\t','')
+            countWord = countWord.replace(/(?:\r\n|\r|\n)/g, '');
+            if (/^[a-zA-Z]+$/.test(countWord))
+            {
+                if (!(countWord.toLowerCase() in wordsMap)) {
+                    wordsMap[countWord.toLowerCase()] = 0
+                }
+                wordsMap[countWord.toLowerCase()] = wordsMap[countWord.toLowerCase()] + 1;
+            }
             var newWord = stemmer(removeContraction(word));
             var contraction = newWord.split(" ");
 
             for (var k = 0; k < contraction.length; k++) {
+
                 nextWord = contraction[k];
                 if (nextWord.includes(".")) {
                     if (nextWord.charAt(0) == ".") {
@@ -411,6 +444,7 @@ var add_words = function(sentence_array) {
                 if (!(nextWord in word_map)) {
                     word_map[nextWord] = 0;
                 }
+                
                 word_map[nextWord] = word_map[nextWord] + 1;
             }
         }
@@ -521,6 +555,75 @@ we can print out the most important sentences first, as they will be near the be
 of our list. The number of sentences depends on how big of a summary
 the user would like.
 */
+var contains = function(needle) {
+    // Per spec, the way to identify NaN is that it is not equal to itself
+    var findNaN = needle !== needle;
+    var indexOf;
+
+    if(!findNaN && typeof Array.prototype.indexOf === 'function') {
+        indexOf = Array.prototype.indexOf;
+    } else {
+        indexOf = function(needle) {
+            var i = -1, index = -1;
+
+            for(i = 0; i < this.length; i++) {
+                var item = this[i];
+
+                if((findNaN && item !== item) || item === needle) {
+                    index = i;
+                    break;
+                }
+            }
+
+            return index;
+        };
+    }
+
+    return indexOf.call(this, needle) > -1;
+};
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+print_map = function(wordmap) {
+    var common = ["is", "and", "a", "the", "that", "are", "in", "an", 'be', 'to', 'of', 'for', 'he', 'she', 'they', 'not', 'as', 
+    'but', 'his', 'her', 'or', 'nor', 'if', 'so', 'its', 'than', 'then', 'were', 'was','on','by','had','has','have','you','it'
+    ,'with','we','but','this','could','from','some','all','who'];
+   
+    if (printed == false) {
+        var items = Object.keys(wordmap).map(function(key) {
+        return [key, wordmap[key]];
+        });
+
+    // Sort the array based on the second element
+        items.sort(function(first, second) {
+            return second[1] - first[1];
+        });
+        mapstr = "";
+        
+        var count = 0
+        for (word in items){
+          
+            if (count < 10) {
+                if (contains.call(common, String(items[word]).split(',')[0])){
+
+                }
+                else {
+                    mapstr = mapstr + capitalizeFirstLetter(String(items[word]).split(',')[0]) + "\n";
+                    count += 1
+                }
+                }  
+            }
+
+            
+
+    
+        mapCount = mapstr
+        printed = true
+
+    }
+    return mapCount
+}
+
 print_final = function(sentenceArray) {
     var sortable = [];
     for (index in sentMap) {
@@ -612,6 +715,8 @@ function removeContraction(str) {
 
     return str;
 }
+
+
 
 /*
 Contracts words into a more basic form so that the weights of words with
@@ -794,6 +899,7 @@ var stemmer = (function(){
         return w;
     }
 })();
+
 
 
 
