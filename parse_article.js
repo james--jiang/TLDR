@@ -42,7 +42,15 @@ validate_period = function(word) {
         return 0;
     } else if (word.includes("Sr.")) {
         return 0;
-    }
+    } else if (word.includes("Ave.")) {
+        return 0;
+    } else if (word.includes("Pl.")) {
+        return 0;
+    } else if (word.includes ("Rd.")) {
+        return 0;
+    } else if (word.includes ("Cpt.")) {
+        return 0;
+    } 
 
     /*
     Checks if the character before the period is uppercase, if yes, then
