@@ -23,7 +23,7 @@ function onPageDetailsReceived(pageDetails)  {
     for (var i = 0; i < sentence_array.length; i++) {
         saved_sentence_array.push(sentence_array[i]);
     }
-
+    word_map = {}
     title_arr = clean_title(pageDetails.title);
 
     add_words(sentence_array);
