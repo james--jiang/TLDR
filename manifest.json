@@ -1,8 +1,8 @@
 {
 	"manifest_version": 2,
     "name": "TL;DR",
-    "description": "Quickly summarize a web article with a click of a button!",
-    "version": "1.0",
+    "description": "Summarizes a whole article or just the highlighted text.",
+    "version": "1.1",
     "background": {
         "scripts": ["event.js"],
         "persistent": false

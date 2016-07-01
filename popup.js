@@ -1,8 +1,8 @@
 /**
-    This callback function is called when the content script has been 
+    This callback function is called when the content script has been
     applied and returned its results.
 
-    Sentence Array parameters are all the same sentence array. First add_words, 
+    Sentence Array parameters are all the same sentence array. First add_words,
     then update_score, then sum_sentence, then print_final.
 
 **/
@@ -10,8 +10,14 @@ var summary_count = 0;
 var pageDetails_holder;
 var user_size_pref = 0.0;
 var saved_sentence_array = [];
+var wordsMap = {}
+var printed = false
+// string used to track the theme
+var mapCount = ""
+// tracks overall words
 
-function onPageDetailsReceived(pageDetails)  { 
+
+function onPageDetailsReceived(pageDetails)  {
     var article_text = pageDetails.summary;
     var sentence_array = makeSentences(article_text);
     for (var i = 0; i < sentence_array.length; i++) {
@@ -27,10 +33,18 @@ function onPageDetailsReceived(pageDetails)  {
     var e = document.getElementById("selected");
     user_size_pref = parseFloat(e.options[e.selectedIndex].value);
 
-    var summarized = print_final(sentence_array);
+    var final_info = print_final(sentence_array);
+
+    var summarized = final_info[0];
+    var wordcount = final_info[1]/200;
+    var readTime = 0;
+    if (wordcount < 1.35) {
+        readTime = 1;
+    } else {
+        readTime = Math.ceil(wordcount);
+    }
 
     document.getElementById('title').textContent = pageDetails.title; 
-    //document.getElementById('url').textContent = pageDetails.url;
 
     if (pageDetails.summary == '') {
         document.getElementById('summary').innerText = "Please highlight the text you would like to summarize.";
@@ -39,25 +53,28 @@ function onPageDetailsReceived(pageDetails)  {
     } else {
         document.getElementById('article_count').textContent = String(sentence_array.length);
         document.getElementById('summary_count').textContent = String(summary_count);
-        document.getElementById('summary').innerText = summarized; 
+        document.getElementById('summary').innerText = summarized;
+        document.getElementById('wordCounts').innerText = print_map(wordsMap);
+        document.getElementById('readTime').innerText = readTime;
     }
-    
-} 
+
+}
 
 function myFunction() {
+
     onPageDetailsReceived(pageDetails_holder);
 }
 
-/** 
+/**
     Determines whether user wants to summarize the highlighted text or whole text.
 **/
 function selectOrWhole(pageDetails) {
     // if (pageDetails.summary == '') {
     //     //chrome.tabs.executeScript(null, { file: 'w_contscrpt.js' });
 
-    //     //chrome.runtime.onMessage.addListener(function(message)  { 
+    //     //chrome.runtime.onMessage.addListener(function(message)  {
     //     // Call the onPageDetailsReceived function in popup.js .
-    //     //onPageDetailsReceived(message); 
+    //     //onPageDetailsReceived(message);
     //     onPageDetailsReceived(pageDetails);
     // } else {
         pageDetails_holder = pageDetails;
@@ -70,11 +87,11 @@ function makeSentences(article_text) {
     return make_sent(article_text);
 }
 
-/* 
+/*
 validate_sent in which checks extraneous cases. This function mostly includes
 conditionals to check certain cases in which is not a valid end of sentence,
 in this case, returning 0 indicating that it is not a valid end of sentence.
-Otherwise, return 1. This function is used to determine whether to add a 
+Otherwise, return 1. This function is used to determine whether to add a
 constructed sentence structure into the sentence array.
 */
 
@@ -112,7 +129,7 @@ validate_period = function(word) {
     } else if (word.includes("Sen.")) {
         return 0;
     }
-    /* 
+    /*
     Checks if the character before the period is uppercase, if yes, then
     return 0. Otherwise, return 1.
     */
@@ -172,7 +189,7 @@ validate_exmark = function(word) {
     } else if (word.includes("Sr.")) {
         return 0;
     }
-    /* 
+    /*
     Checks if the character before the period is uppercase, if yes, then
     return 0. Otherwise, return 1.
     */
@@ -233,7 +250,7 @@ validate_qmark = function(word) {
     } else if (word.includes("Sr.")) {
         return 0;
     }
-    /* 
+    /*
     Checks if the character before the period is uppercase, if yes, then
     return 0. Otherwise, return 1.
     */
@@ -265,7 +282,7 @@ validate_qmark = function(word) {
 }
 
 
-/* 
+/*
 make_sent first parses article text into a word array. Secondly, analyzes periods
 and puts sentences in a sentence array.
 */
@@ -290,7 +307,7 @@ make_sent = function(a) {
             }
         } else if (word_array[word].includes(".")){
         /*
-        Otherwise, test validity of sentence. If valid, puts in sentence 
+        Otherwise, test validity of sentence. If valid, puts in sentence
         array and refreshes sentence string. Otherwise continue adding onto
         the sentence.
         */
@@ -360,7 +377,7 @@ make_sent = function(a) {
                 var second_part = word_array[word].substring(word_array[word].indexOf("?") + 1, word_array[word].length)
                 sentence = sentence + with_period;
                 sentence_array.push(sentence);
-                sentence = second_part + " "; 
+                sentence = second_part + " ";
             }
         }
 
@@ -372,19 +389,55 @@ make_sent = function(a) {
 
 
 
+/*
+This word_map will map a word to a value, indicating what we believe
+its importance is to the whole story. A word in the title is more
+important then some word like "a".
+*/
 
 var word_map = {};
-var add_words = function(sentence_array) { 
+
+/*
+We are going to count the amount of times we see each word through the article.
+The more times we see the word, the more important it likely is to the whole article.
+We also take care of words that are contractions so that we can get the base word
+*/
+var add_words = function(sentence_array) {
     for (var i = 0; i < sentence_array.length; i++) {
         sentence = sentence_array[i];
         words = sentence.split(" ");
 
+
         for (var j = 0; j < words.length; j++) {
             word = words[j];
+            //for word count
+            countWord = words[j]
+
+            if (validate_period(countWord))  {
+                countWord = countWord.replace('.','')
+            }
+            countWord = countWord.replace(',','')
+            
+            countWord = countWord.replace('?','')
+            
+            countWord = countWord.replace('!','')
+
+            countWord = countWord.replace(' ','')
+            countWord = countWord.replace('\n','')
+            countWord = countWord.replace('\t','')
+            countWord = countWord.replace(/(?:\r\n|\r|\n)/g, '');
+            if (/^[a-zA-Z]+$/.test(countWord))
+            {
+                if (!(countWord.toLowerCase() in wordsMap)) {
+                    wordsMap[countWord.toLowerCase()] = 0
+                }
+                wordsMap[countWord.toLowerCase()] = wordsMap[countWord.toLowerCase()] + 1;
+            }
             var newWord = stemmer(removeContraction(word));
             var contraction = newWord.split(" ");
 
             for (var k = 0; k < contraction.length; k++) {
+
                 nextWord = contraction[k];
                 if (nextWord.includes(".")) {
                     if (nextWord.charAt(0) == ".") {
@@ -402,20 +455,23 @@ var add_words = function(sentence_array) {
                 if (!(nextWord in word_map)) {
                     word_map[nextWord] = 0;
                 }
+                
                 word_map[nextWord] = word_map[nextWord] + 1;
             }
-        }   
+        }
     }
 }
 
 
 
-
+// These are words which shouldn't have as much weight in a sentence.
 var norms = ['is', 'and', 'a', 'the', 'that', 'are', 'in', 'an', 'be', 'to', 'of', 'for', 'he', 'she', 'they', 'not', 'as', 'but', 'his', 'her', 'or', 'nor', 'if', 'so', 'its', 'than', 'then', 'were', 'was'];
+// On the other hand, words in the title which appear in the article are of more importance.
 var title_arr = [];
 
+// Gets a clean version of the words in the title
 var clean_title = function(og_title) {
-    var title =  og_title.split(" ");//inputted_title.split(" ");
+    var title =  og_title.split(" ");
 
     var title_length = title.length;
 
@@ -434,13 +490,19 @@ var clean_title = function(og_title) {
                 title[index] = word_seg.substring(0, word_seg.length - 1);
             }
         }
-        title_arr[index] = title[index];  
+        title_arr[index] = title[index];
     }
     return title_arr;
 }
 
 
-
+/*
+Applied by the actual pop-up, here is where we actually weight each word.
+If a word is in the title, we give it a much higher value, but if it's in the norms
+array we defined above, we give it less value, even if it was in the title already.
+The values we picked, 8.0 and .25 respectively, were more of a trial and error until we
+found a good combination.
+*/
 var update_score = function() { //applied where?
     for (word in word_map) {
         var def = 1.5;
@@ -454,10 +516,12 @@ var update_score = function() { //applied where?
     }
 }
 
-
+// Maps a sentence to its value based on the words in the sentence.
 var sentMap = {};
-var sum_sentence = function(sentenceArray) { 
-    
+
+//Populates sentMap with each sentence and its value based on the values in the wordmap.
+var sum_sentence = function(sentenceArray) {
+
     for (var index = 0; index < sentenceArray.length; index++) {
         var sum = 0;
         var sent = sentenceArray[index];
@@ -494,18 +558,105 @@ var sum_sentence = function(sentenceArray) {
 }
 
 
+/*
+Here is where the actual summary is finally printed out.
+We have, what we believe to be, some values associated with each sentence
+in the article. By sorting the array in terms of the values, we know that
+we can print out the most important sentences first, as they will be near the beginning
+of our list. The number of sentences depends on how big of a summary
+the user would like.
+*/
+
+// Check if an array contains a string
+var contains = function(needle) {
+    // Per spec, the way to identify NaN is that it is not equal to itself
+    var findNaN = needle !== needle;
+    var indexOf;
+
+    if(!findNaN && typeof Array.prototype.indexOf === 'function') {
+        indexOf = Array.prototype.indexOf;
+    } else {
+        indexOf = function(needle) {
+            var i = -1, index = -1;
+
+            for(i = 0; i < this.length; i++) {
+                var item = this[i];
+
+                if((findNaN && item !== item) || item === needle) {
+                    index = i;
+                    break;
+                }
+            }
+
+            return index;
+        };
+    }
+
+    return indexOf.call(this, needle) > -1;
+};
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+//Print map functions prints out the themes of the article, organized by word count but including generic pronouns and prepositions
+print_map = function(wordmap) {
+    var common = ["is", "and", "a", "the", "that", "are", "in", "an", 'be', 'to', 'of', 'for', 'he', 'she', 'they', 'not', 'as', 
+    'but', 'his', 'her', 'or', 'nor', 'if', 'so', 'its', 'than', 'then', 'were', 'was','on','by','had','has','have','you','it'
+    ,'with','we','but','this','could','from','some','all','who'];
+   
+    if (printed == false) {
+        var items = Object.keys(wordmap).map(function(key) {
+        return [key, wordmap[key]];
+        });
+
+    // Sort the array based on the second element
+        items.sort(function(first, second) {
+            return second[1] - first[1];
+        });
+        mapstr = "";
+        
+        var count = 0
+        for (word in items){
+          
+            if (count < 10) {
+                if (contains.call(common, String(items[word]).split(',')[0])){
+
+                }
+                else {
+                    if (count == 9) {
+                        mapstr = mapstr + capitalizeFirstLetter(String(items[word]).split(',')[0]);
+                        count += 1
+                    }
+                    else {
+                        mapstr = mapstr + capitalizeFirstLetter(String(items[word]).split(',')[0]) +  ", ";
+                        count += 1
+                    }
+                }
+                }  
+            }
+
+            
+
+    
+        mapCount = mapstr
+        printed = true
+
+    }
+    return mapCount
+}
 
 print_final = function(sentenceArray) {
     var sortable = [];
     for (index in sentMap) {
         sortable.push([index, sentMap[index]]);
     }
-    sortable.sort(function(a, b) {return b[1] - a[1]}); 
+    sortable.sort(function(a, b) {return b[1] - a[1]});
     var i = 0;
     var str = "";
     var overall = [];
 
-    var num = Math.floor(sentenceArray.length * .4);
+    var num = Math.floor(sentenceArray.length * 0.4);
     if (user_size_pref != 0.0) {
         num = Math.floor(sentenceArray.length * user_size_pref);
     } if (sentenceArray.length <= 10) {
@@ -528,7 +679,7 @@ print_final = function(sentenceArray) {
                     quote_str.concat(saved_sentence_array[sarray_index]);
                 }
                 overall.push(quote_str);
-            // Check if quote is in end of sentence.    
+            // Check if quote is in end of sentence.
             } else if (sortable[k][0].indexOf('"') == (sortable[k][0].length - 1)) {
                 var sarray_index = saved_sentence_array.indexOf(sortable[k][0],[0, num]);
                 var quote_str = sortable[k][0];
@@ -545,18 +696,22 @@ print_final = function(sentenceArray) {
             overall.push(sortable[k][0]);
         }
     }
-    overall.sort(function (a, b) { 
+    overall.sort(function (a, b) {
     return a - b;
     });
+    var count = sentenceArray[0].split(" ").length;
     str = str.concat(sentenceArray[0]);
     str = str.concat(" ");
+    var temp = "";
     for (var j = 0; j < overall.length; j++) {
         if (overall[j] != 0) {
-            str = str.concat(sentenceArray[overall[j]]);
+            temp = sentenceArray[overall[j]];
+            count += temp.split(" ").length;
+            str = str.concat(temp);
             str = str.concat(" ");
         }
     }
-    return str;
+    return [str,count];
 }
 
 
@@ -571,7 +726,7 @@ function removeContraction(str) {
     str = str.replace(/n't/g, " not");
     str = str.replace(/'twas/g, "it was");
     str = str.replace(/ma'am/g, "madam");
-    
+
     // Regular
     str = str.replace(/'d/g, ' would');
     str = str.replace(/'m/g, ' am');
@@ -580,13 +735,21 @@ function removeContraction(str) {
     str = str.replace(/'s/g, ''); // No "is" to prevent confusion w/ possessive.
     str = str.replace(/'ve/g, " have");
     str = str.replace(/y'/g, "you ");
-    
+
     // Removes all remaining apostrophes
     str = str.replace(/'/g, '');
-    
+
     return str;
 }
 
+
+
+/*
+Contracts words into a more basic form so that the weights of words with
+the same roots can be correctly calculated.
+The Porter Stemming Algorithm was created by Martin Porter.
+Javascript version created by 'andargor' and revised by Christopher McKenzie.
+*/
 var stemmer = (function(){
     var step2list = {
             "ational" : "ate",
@@ -765,14 +928,15 @@ var stemmer = (function(){
 
 
 
+
 // When the popup HTML has loaded
 window.addEventListener('load', function(evt) {
 
     // Get the event page/background page
     chrome.runtime.getBackgroundPage(function(eventPage) {
 
-        // Call the getPageInfo function in the event page, passing in 
-        // our onPageDetailsReceived function as the callback. This injects 
+        // Call the getPageInfo function in the event page, passing in
+        // our onPageDetailsReceived function as the callback. This injects
         // content.js into the current tab's HTML.
         eventPage.getPageDetails(selectOrWhole);
     });

@@ -39,13 +39,18 @@
 <script src="popup.js"></script>
     </head>
     <body>
-        <h1> <div id="title"></div> </h1>
+        <h1> <div>
+            <span id="title"></span>
+            
+        </div> </h1>
+            <p><small>Read Time: <ins id="readTime"></ins> min</small></p>
             <p><small>Article of 
                 <ins id="article_count"></ins> sentences reduced to 
-                <ins id="summary_count"></ins>.
+                <ins id="summary_count"></ins>
                 </small></p>
-
-                <p><small>Summary Size: </small><select id="selected">
+            
+                <p><small>Summary Size: </small>
+                <select id="selected" autofocus>
                   <option value=".2">Small</option>
                   <option value=".4" selected="selected">Medium</option>
                   <option value=".6">Large</option>
@@ -53,5 +58,9 @@
                 
             <p><label for="summary"><strong>Summary</strong></label>
             <p id="summary" name="summary" rows="6" cols="35"></p> 
+            <p><label for="summary"><strong>Article Themes</strong></label>
+
+            <p id="wordCounts" name="word count" rows="6" cols="35"></p> 
+
     </body>
 </html>

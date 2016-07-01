@@ -1,6 +1,6 @@
 # TL;DR
 
-Version: 1.0 | October 2015
+Version: 1.1 | October 2015
 
 
 <b>What is TL;DR?</b> <br/>

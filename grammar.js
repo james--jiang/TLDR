@@ -5,10 +5,14 @@ function removeContraction(str) {
     str = str.replace(/can't/g, "can not");
     str = str.replace(/won't/g, "will not");
     str = str.replace(/shan't/g, "shall not");
+    str = str.replace(/shouldn't/g, "should not");
     str = str.replace(/where'd/g, "where did");
     str = str.replace(/n't/g, " not");
     str = str.replace(/'twas/g, "it was");
     str = str.replace(/ma'am/g, "madam");
+    str = str.replace(/wasn't/g,"was not")
+    str = str.replace(/couldn't/g,"could not")
+
     
     // Regular
     str = str.replace(/'d/g, ' would');
