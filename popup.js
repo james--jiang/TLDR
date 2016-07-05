@@ -15,7 +15,16 @@ var printed = false
 // string used to track the theme
 var mapCount = ""
 // tracks overall words
-
+function httpGetAsync(theUrl, callback)
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() { 
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            callback(xmlHttp.responseText);
+    }
+    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+    xmlHttp.send(null);
+}
 
 function onPageDetailsReceived(pageDetails)  {
     var article_text = pageDetails.summary;
@@ -47,6 +56,13 @@ function onPageDetailsReceived(pageDetails)  {
     document.getElementById('title').textContent = pageDetails.title; 
 
     if (pageDetails.summary == '') {
+        // URL = "http://boilerpipe-web.appspot.com/extract?url=" + window.location.href;
+        // parameters = "extractor=ArticleExtractor&output=htmlFragment&extractImages=&token=";
+        // URL = URL+parameters
+
+        // var articleContent = httpGetAsync(URL);
+        // document.getElementById('summary').innerText = articleContent;
+
         document.getElementById('summary').innerText = "Please highlight the text you would like to summarize.";
         document.getElementById('summary_count').textContent = "nothing :( ";
          // will be the final ordered lists
@@ -603,7 +619,7 @@ function capitalizeFirstLetter(string) {
 print_map = function(wordmap) {
     var common = ["is", "and", "a", "the", "that", "are", "in", "an", 'be', 'to', 'of', 'for', 'he', 'she', 'they', 'not', 'as', 
     'but', 'his', 'her', 'or', 'nor', 'if', 'so', 'its', 'than', 'then', 'were', 'was','on','by','had','has','have','you','it'
-    ,'with','we','but','this','could','from','some','all','who'];
+    ,'with','we','but','this','could','from','some','all','who','your','there'];
    
     if (printed == false) {
         var items = Object.keys(wordmap).map(function(key) {
